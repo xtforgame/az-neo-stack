@@ -86,6 +86,8 @@ class SubContent03 extends React.PureComponent { // eslint-disable-line react/pr
           </IconButton>
         </TableAppBar>
         <EnhancedTable
+          orderBy="id"
+          order="desc"
           withDetail
           getActionMenuItems={closeMenu => ([
             <MenuItem

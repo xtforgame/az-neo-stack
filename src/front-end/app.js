@@ -4,12 +4,16 @@ import Routes from 'react-root/Routes';
 import axios from 'axios';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
+import { initReactI18next, useSSR } from 'react-i18next';
+import Backend from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import preloadedStateContext, { injectionKey } from 'common/react/az-preloaded-state-context';
 
 import {
   routerPrefix,
+  urlPrefix,
 } from 'common/config';
-
+import i18n, { i18nInit } from 'common/react/i18n';
 import { loadState, saveState, removeState } from './localStorage';
 
 class DebugRouter extends BrowserRouter {
@@ -50,10 +54,9 @@ const getCookie = (name) => {
 
 const Main = () => {
   const localState = loadState();
-  console.log('localState :', localState);
-
   const [sessionExists, setSessionExists] = useState(getCookie('login-session-exists') === 'true');
   const [session, setSession] = useState(localState && localState.session);
+  useSSR(window[injectionKey].i18n.initialI18nStore, window[injectionKey].i18n.initialLanguage);
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
@@ -110,7 +113,43 @@ const Main = () => {
 // const renderMethod = module.hot && !process.env.reactSsrMode ? ReactDOM.render : ReactDOM.hydrate;
 const renderMethod = process.env.reactSsrMode ? ReactDOM.hydrate : ReactDOM.render;
 
-renderMethod(
-  <Main />,
-  document.getElementById('page_main'),
-);
+const renderApp = async () => {
+  i18n
+    .use(Backend)
+    .use(initReactI18next)
+    .use(LanguageDetector);
+  await i18nInit({
+    ns: ['app-common'],
+    defaultNS: 'app-common',
+
+    // fallbackLng: 'en',
+    fallbackLng: {
+      'zh-TW': ['zh-TW', 'en'],
+      'zh-CN': ['zh-CN', 'en'],
+      default: ['en'],
+    },
+    debug: false,
+
+    // (overrides language detection)
+    // lng: DEFAULT_LOCALE,
+
+    interpolation: {
+      escapeValue: false, // not needed for react as it escapes by default
+    },
+    backend: {
+      loadPath: `${urlPrefix}translations/{{ns}}/{{lng}}.json`,
+    },
+    react: {
+      useSuspense: false,
+    },
+  });
+  if (window[injectionKey].i18n.initialI18nStore) {
+    i18n.services.resourceStore.data = window[injectionKey].i18n.initialI18nStore;
+  }
+  renderMethod(
+    <Main />,
+    document.getElementById('page_main'),
+  );
+};
+
+renderApp();

@@ -16,7 +16,7 @@
     "development": {
       "plugins": [
         ["module-resolver", {
-          "extensions": [".js", ".ts"],
+          "extensions": [".js", ".ts", ".jsx", ".tsx"],
           "alias": {
             "~": "./src/server",
             "common/config": "./src/common/configs/development",
@@ -31,7 +31,7 @@
     "production": {
       "plugins": [
         ["module-resolver", {
-          "extensions": [".js", ".ts"],
+          "extensions": [".js", ".ts", ".jsx", ".tsx"],
           "alias": {
             "~": "./src/server",
             "common/config": "./src/common/configs/production",
@@ -46,7 +46,7 @@
     "test": {
       "plugins": [
         ["module-resolver", {
-          "extensions": [".js", ".ts"],
+          "extensions": [".js", ".ts", ".jsx", ".tsx"],
           "alias": {
             "~": "./src/server",
             "common/config": "./src/common/configs/test",

@@ -74,6 +74,11 @@ export default class KoaHelperEx {
         ctx.local.userSession = this.koaHelper.authCore.verifyToken(token, () => {});
       }
     }
+    ctx.local.azPreloadedState = {
+      ...ctx.local.azPreloadedState,
+      session: ctx.local.userSession,
+      sessionExists: !!ctx.local.userSession,
+    };
     return next();
   }
 }

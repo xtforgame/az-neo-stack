@@ -76,8 +76,9 @@
   },
   "include": [
     "./**/*.ts",
+    "./**/*.tsx",
     // "./**/*.js",
     "../tsd/node.d.ts",
-    "../tsd/server/**/*"
+    "../tsd/server/**/*",
   ],
 }

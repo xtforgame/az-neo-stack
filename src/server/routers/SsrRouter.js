@@ -18,7 +18,7 @@ export default class SsrRouter extends RouterBase {
               ctx.redirect(p);
               return;
             }
-            if (ctx.local.md.phone()) {
+            if (ctx.local.mobileDetect.phone()) {
               ctx.status = 301;
               console.log('urlPrefix :', urlPrefix);
               ctx.redirect(pathLib.join(`${urlPrefix}mobile`, p.replace(urlPrefix, '')));
@@ -26,10 +26,6 @@ export default class SsrRouter extends RouterBase {
             }
             renderer(ctx, ctx.path, {
               canonicalPath,
-              azPreloadedState: {
-                session: ctx.local.userSession,
-                sessionExists: ctx.local.userSession,
-              },
             });
             // next();
           });
@@ -48,10 +44,6 @@ export default class SsrRouter extends RouterBase {
             }
             renderer(ctx, ctx.path, {
               canonicalPath, // ctx.path.replace(/\/mobile/g, ''),
-              azPreloadedState: {
-                session: ctx.local.userSession,
-                sessionExists: ctx.local.userSession,
-              },
             });
             // next();
           });

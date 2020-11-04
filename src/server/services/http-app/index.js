@@ -9,7 +9,10 @@ import http from 'http';
 import path from 'path';
 import appRootPath from 'app-root-path';
 import MobileDetect from 'mobile-detect';
+import i18nextMiddleware from 'i18next-http-middleware';
+import Backend from 'i18next-fs-backend';
 import { urlPrefix, routerPrefix } from 'common/config';
+import i18n from 'common/react/i18n';
 import getWebpackService from './webpack-service';
 import runServer from './runServer';
 import ServiceBase from '../ServiceBase';
@@ -33,17 +36,11 @@ export default class HttpApp extends ServiceBase {
     super();
     this.app = new Koa();
     this.app.proxy = !!process.env.KOA_PROXY_ENABLED;
-    this.app.use((ctx, next) => {
-      ctx.local = ctx.local || {
-        md: new MobileDetect(ctx.request.headers['user-agent']),
-      };
-      return next();
-    });
     // prevent any error to be sent to user
     this.app.use((ctx, next) => next()
     .then(() => {
       if (ctx.body == null && ctx.status === 404) {
-        if (ctx.local.md.phone() && ctx.path.startsWith(`${urlPrefix}mobile`)) {
+        if (ctx.local.mobileDetect.phone() && ctx.path.startsWith(`${urlPrefix}mobile`)) {
           renderer(ctx, `${urlPrefix}mobile/not-found`, {});
         } else {
           renderer(ctx, `${urlPrefix}not-found`, {});
@@ -67,6 +64,33 @@ export default class HttpApp extends ServiceBase {
       jsonLimit: '10mb',
       textLimit: '10mb',
     }));
+    const i18nextHandle = i18nextMiddleware.handle(i18n);
+    this.app.use((ctx, next) => {
+      ctx.response.setHeader = (k, v) => {
+        ctx.response.set(k, v);
+      };
+      i18nextHandle(ctx, null, next);
+    });
+    this.app.use((ctx, next) => {
+      ctx.local = ctx.local || {
+        mobileDetect: new MobileDetect(ctx.request.headers['user-agent']),
+      };
+      ctx.local.md = {
+        mobile: ctx.local.mobileDetect.mobile(),
+        phone: ctx.local.mobileDetect.phone(),
+        tablet: ctx.local.mobileDetect.tablet(),
+      };
+      const initialI18nStore = {};
+      ctx.request.i18n.languages.forEach((l) => {
+        initialI18nStore[l] = ctx.request.i18n.services.resourceStore.data[l];
+      });
+      const initialLanguage = ctx.request.i18n.language;
+      ctx.local.i18n = {
+        initialI18nStore,
+        initialLanguage,
+      };
+      return next();
+    });
     /* let credentials = */this.credentials = envCfg.credentials;
 
     const KoaRouter = createRouterClass({
@@ -82,8 +106,35 @@ export default class HttpApp extends ServiceBase {
     };
   }
 
-  onStart() {
+  async onStart() {
     // ======================================================
+    await new Promise((resolve) => {
+      i18n
+      .use(Backend)
+      .use(i18nextMiddleware.LanguageDetector)
+      .init(
+        {
+          ns: ['app-common'],
+          defaultNS: 'app-common',
+          // fallbackLng: 'en',
+          fallbackLng: {
+            'zh-TW': ['zh-TW', 'en'],
+            'zh-CN': ['zh-CN', 'en'],
+            default: ['en'],
+          },
+          debug: false,
+          preload: ['en', 'de', 'js', 'zh-TW', 'zh-CN'],
+          backend: {
+            loadPath: `${appRoot}/public/translations/{{ns}}/{{lng}}.json`,
+            addPath: `${appRoot}/public/translations/{{ns}}/{{lng}}.missing.json`,
+          },
+          react: {
+            useSuspense: false,
+          },
+        },
+        () => { resolve(); },
+      );
+    });
     let p = Promise.resolve();
     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
       const { middlewarePromise, compileDonePromise } = getWebpackService();

@@ -1,6 +1,6 @@
 // @flow weak
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +31,12 @@ export default (props) => {
     onToggleNotificationPanel = () => {},
   } = props;
 
+  const [t] = useTranslation('app-common');
+  // console.log('============t("appTitle") :', t('appTitle'));
+  // useEffect(() => {
+  //   console.log('useEffect ===== t("appTitle") :', t('appTitle'));
+  // }, []);
+
   const classes = useStyles();
 
   return (
@@ -40,7 +47,7 @@ export default (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit" className={classes.flex1}>
-            Header
+            {t('appTitle')}
           </Typography>
           <IconButton color="inherit" onClick={onToggleNotificationPanel} aria-label="NotificationList">
             <Badge badgeContent={4} color="secondary">
