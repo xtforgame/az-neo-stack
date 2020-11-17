@@ -17,6 +17,7 @@ export default (ctx, path, { canonicalPath } : RenderOptions = { canonicalPath: 
   const sheets = new ServerStyleSheets();
 
   const azPreloadedState : AzPreloadedState = ctx.local.azPreloadedState || {};
+  azPreloadedState.reactRenderMode = process.env.reactSsrMode ? 'ssr' : 'csr';
   azPreloadedState.md = ctx.local.md;
   azPreloadedState.i18n = ctx.local.i18n;
 

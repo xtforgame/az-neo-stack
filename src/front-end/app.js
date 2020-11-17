@@ -52,11 +52,15 @@ const getCookie = (name) => {
   return null;
 };
 
+const getInitialI18nStore = () => window[injectionKey] && window[injectionKey].i18n && window[injectionKey].i18n.initialI18nStore;
+
 const Main = () => {
   const localState = loadState();
   const [sessionExists, setSessionExists] = useState(getCookie('login-session-exists') === 'true');
   const [session, setSession] = useState(localState && localState.session);
-  useSSR(window[injectionKey].i18n.initialI18nStore, window[injectionKey].i18n.initialLanguage);
+  if (process.env.reactSsrMode) {
+    useSSR(getInitialI18nStore(), window[injectionKey].i18n.initialLanguage);
+  }
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
@@ -143,8 +147,9 @@ const renderApp = async () => {
       useSuspense: false,
     },
   });
-  if (window[injectionKey].i18n.initialI18nStore) {
-    i18n.services.resourceStore.data = window[injectionKey].i18n.initialI18nStore;
+  const initialI18nStore = getInitialI18nStore();
+  if (initialI18nStore) {
+    i18n.services.resourceStore.data = initialI18nStore;
   }
   renderMethod(
     <Main />,

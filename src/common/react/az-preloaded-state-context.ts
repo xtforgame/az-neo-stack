@@ -3,6 +3,7 @@ import React from 'react';
 export const injectionKey = '__AZ_PRELOADED_STATE__';
 
 export type AzPreloadedState = {
+  reactRenderMode: 'ssr' | 'csr';
   md: {
     mobile: string | null;
     phone: string | null;
@@ -29,6 +30,7 @@ export type Context = {
 
 export default React.createContext<Context>({
   state: {
+    reactRenderMode: process.env.reactSsrMode ? 'ssr' : 'csr',
     md: {
       mobile: null,
       phone: null,

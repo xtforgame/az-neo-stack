@@ -64,12 +64,28 @@ export default class HttpApp extends ServiceBase {
       jsonLimit: '10mb',
       textLimit: '10mb',
     }));
-    const i18nextHandle = i18nextMiddleware.handle(i18n);
+    const i18nextHandle = i18nextMiddleware.handle(i18n, {
+      send: () => {
+        // console.log('send');
+      },
+    });
     this.app.use((ctx, next) => {
       ctx.response.setHeader = (k, v) => {
         ctx.response.set(k, v);
       };
-      i18nextHandle(ctx, null, next);
+      return new Promise((res, rej) => {
+        try {
+          i18nextHandle(ctx.request, ctx.response, (r) => {
+            next()
+            .then(() => {
+              res(r);
+            })
+            .catch(rej);
+          });
+        } catch (error) {
+          rej(error);
+        }
+      });
     });
     this.app.use((ctx, next) => {
       ctx.local = ctx.local || {
@@ -81,14 +97,21 @@ export default class HttpApp extends ServiceBase {
         tablet: ctx.local.mobileDetect.tablet(),
       };
       const initialI18nStore = {};
-      ctx.request.i18n.languages.forEach((l) => {
-        initialI18nStore[l] = ctx.request.i18n.services.resourceStore.data[l];
-      });
-      const initialLanguage = ctx.request.i18n.language;
-      ctx.local.i18n = {
-        initialI18nStore,
-        initialLanguage,
-      };
+      if (ctx.request.i18n) {
+        ctx.request.i18n.languages.forEach((l) => {
+          initialI18nStore[l] = ctx.request.i18n.services.resourceStore.data[l];
+        });
+        const initialLanguage = ctx.request.i18n.language;
+        ctx.local.i18n = {
+          initialI18nStore,
+          initialLanguage,
+        };
+      } else {
+        ctx.local.i18n = {
+          initialI18nStore,
+          initialLanguage: '',
+        };
+      }
       return next();
     });
     /* let credentials = */this.credentials = envCfg.credentials;
