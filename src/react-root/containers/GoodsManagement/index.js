@@ -7,9 +7,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuItem from '@material-ui/core/MenuItem';
 import TableAppBar from 'azrmui/core/Tables/TableAppBar';
 import EnhancedTable from 'azrmui/core/Tables/EnhancedTable';
-import SimpleTabs from './SimpleTabs';
 import Chip from '@material-ui/core/Chip';
 import createCommonStyles from 'azrmui/styles/common';
+import SimpleTabs from './SimpleTabs';
 
 const styles = theme => ({
   ...createCommonStyles(theme, ['flex', 'appBar']),

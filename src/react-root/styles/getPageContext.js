@@ -1,4 +1,4 @@
-/* eslint-disable flowtype/require-valid-file-annotation, no-underscore-dangle */
+/* eslint-disable no-underscore-dangle */
 
 // https://github.com/mui-org/material-ui/blob/master/docs/src/modules/styles/getPageContext.js
 import { create, SheetsRegistry } from 'jss';
@@ -6,7 +6,7 @@ import rtl from 'jss-rtl';
 import { createGenerateClassName, jssPreset } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {
-  /* purple, */green, orange, red, blue, indigo, pink, grey, common,
+  /* purple, indigo, */green, orange, red, blue, pink, grey, common,
 } from '@material-ui/core/colors';
 
 // const theme = createMuiTheme({

@@ -1,4 +1,4 @@
-/* eslint-disable flowtype/require-valid-file-annotation, no-underscore-dangle */
+/* eslint-disable no-underscore-dangle */
 // https://github.com/mui-org/material-ui/blob/master/docs/src/modules/components/AppWrapper.js
 import React, { useState, useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';

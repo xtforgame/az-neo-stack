@@ -1,13 +1,10 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign, import/no-extraneous-dependencies */
 // import Sequelize from 'sequelize';
 import {
   // RestfulResponse,
   RestfulError,
 } from 'az-restful-helpers';
 import * as babel from '@babel/core';
-import {
-  promiseReduce,
-} from 'common/utils';
 import RouterBase from '../core/router-base';
 
 const options = {

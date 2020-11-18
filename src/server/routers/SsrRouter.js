@@ -1,5 +1,5 @@
 import pathLib from 'path';
-import { urlPrefix, routerPrefix } from 'common/config';
+import { urlPrefix } from 'common/config';
 import { forEachNode } from 'react-root/desktop/navigation';
 import { forEachNode as forEachMobileNode } from 'react-root/mobile/navigation';
 import renderer from './renderer';
@@ -20,7 +20,6 @@ export default class SsrRouter extends RouterBase {
             }
             if (ctx.local.mobileDetect.phone()) {
               ctx.status = 301;
-              console.log('urlPrefix :', urlPrefix);
               ctx.redirect(pathLib.join(`${urlPrefix}mobile`, p.replace(urlPrefix, '')));
               return;
             }

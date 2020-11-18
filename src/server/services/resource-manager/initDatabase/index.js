@@ -105,10 +105,9 @@ const createTestUser = async (resourceManager) => {
       }
       return null;
     });
-    console.log('defaultOrgId, defaultProjId :', defaultOrgId, defaultProjId);
+    // console.log('defaultOrgId, defaultProjId :', defaultOrgId, defaultProjId);
     await transaction.commit();
   } catch (error) {
-    console.log('error :', error);
     await transaction.rollback();
     throw error;
   }

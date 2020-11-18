@@ -5,7 +5,7 @@ export default ({ children }) => (
   <React.Fragment>
     Articles
     <br />
-    <Link path={''}>
+    <Link path="">
       Home
     </Link>
     {children}

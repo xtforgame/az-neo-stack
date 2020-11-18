@@ -1,5 +1,4 @@
 import { ApolloServer, gql } from 'apollo-server-koa';
-import drawIcon from '~/utils/drawIcon';
 import RouterBase from '../core/router-base';
 
 const libraries = [
@@ -57,7 +56,7 @@ const printDeepSelections = (selections, prefix = '') => {
     const name = fieldNode.name.value;
     const fullname = prefix ? `${prefix}.${name}` : name;
 
-    console.log('name :', fullname);
+    // console.log('name :', fullname);
     if (fieldNode.selectionSet && fieldNode.selectionSet.selections) {
       printDeepSelections(fieldNode.selectionSet.selections, fullname);
     }

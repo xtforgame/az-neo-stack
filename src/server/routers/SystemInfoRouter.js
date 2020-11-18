@@ -13,11 +13,7 @@ export default class SystemInfoRouter extends RouterBase {
   }
 
   setupRoutes({ router }) {
-    router.get('/api/system-info', (ctx, next) => {
-      // RestfulError.koaThrowWith(ctx, 403, 'Admin privilege required');
-
-      return ctx.body = this.systemInfo;
-    });
+    router.get('/api/system-info', (ctx, next) => ctx.body = this.systemInfo);
   }
 
   onAllStarted(containerInterface) {

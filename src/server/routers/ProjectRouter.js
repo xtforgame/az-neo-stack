@@ -72,7 +72,9 @@ export default class ProjectRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
 
-      const members = await findProjectMembers(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId);
+      const members = await findProjectMembers(
+        this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId
+      );
       if (!members) {
         return RestfulError.koaThrowWith(ctx, 404, 'Project not found');
       }
@@ -87,7 +89,7 @@ export default class ProjectRouter extends RouterBase {
 
       const { memberId, name, disabled } = ctx.request.body;
 
-      const member = await addProjectMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, {
+      await addProjectMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, {
         id: memberId,
         name,
         disabled,
@@ -102,7 +104,9 @@ export default class ProjectRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
 
-      const member = await patchProjectMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, ctx.params.memberId, ctx.request.body);
+      const member = await patchProjectMember(
+        this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, ctx.params.memberId, ctx.request.body
+      );
       if (!member) {
         return RestfulError.koaThrowWith(ctx, 404, 'Project not found');
       }
@@ -120,7 +124,7 @@ export default class ProjectRouter extends RouterBase {
 
       const { memberId } = ctx.params;
 
-      const member = await removeProjectMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, memberId);
+      await removeProjectMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.projectId, memberId);
 
       return ctx.body = { success: true };
     });

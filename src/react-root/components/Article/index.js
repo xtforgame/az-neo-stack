@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable jsx-a11y/alt-text, react/no-array-index-key */
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';

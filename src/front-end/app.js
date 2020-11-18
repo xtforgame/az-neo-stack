@@ -30,7 +30,9 @@ class DebugRouter extends BrowserRouter {
 
 const Router = process.env.reactSsrMode ? DebugRouter : HashRouter;
 
-const getInitialI18nStore = () => window[injectionKey] && window[injectionKey].i18n && window[injectionKey].i18n.initialI18nStore;
+const getInitialI18nStore = () => window[injectionKey]
+  && window[injectionKey].i18n
+  && window[injectionKey].i18n.initialI18nStore;
 
 const Main = () => {
   if (process.env.reactSsrMode) {

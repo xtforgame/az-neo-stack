@@ -1,12 +1,8 @@
 /* eslint-disable global-require, import/no-extraneous-dependencies */
-import path from 'path';
-import appRootPath from 'app-root-path';
 import webpack from 'webpack';
 import {
   webpackHotClientPort,
 } from 'config';
-
-const appRoot = appRootPath.resolve('./');
 
 export default () => {
   let config = null;

@@ -18,16 +18,19 @@ export default ({ artcle, Link }) => {
       Title:
       <br />
       {artcle.title}
-      <br /><br />
+      <br />
+      <br />
       Desc.:
       <br />
       {artcle.description}
-      <br /><br />
+      <br />
+      <br />
       <img width="100%" alt={artcle.title} src={artcle.thumbnail} />
-      <br /><br />
+      <br />
+      <br />
       <Link path={`${artcle.category.routePathPrefix}${artcle.id}`}>
         Read
       </Link>
     </div>
-  )
+  );
 };

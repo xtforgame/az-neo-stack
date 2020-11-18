@@ -1,9 +1,5 @@
 import React from 'react';
 
-import {
-  urlPrefix,
-} from 'config';
-
 import { Link } from '../../redirect';
 
 export default props => (

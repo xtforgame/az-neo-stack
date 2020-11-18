@@ -58,7 +58,7 @@ const printDeepSelections = (selections, prefix = '') => {
     const name = fieldNode.name.value;
     const fullname = prefix ? `${prefix}.${name}` : name;
 
-    console.log('name :', fullname);
+    // console.log('name :', fullname);
     if (fieldNode.selectionSet && fieldNode.selectionSet.selections) {
       printDeepSelections(fieldNode.selectionSet.selections, fullname);
     }

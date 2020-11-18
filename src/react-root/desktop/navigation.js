@@ -3,7 +3,7 @@
 //   routerPrefix,
 // } from 'config';
 import React from 'react';
-import { renderRoutes } from "react-router-config";
+import { renderRoutes } from 'react-router-config';
 import MainFrame from './MainFrame';
 import Home from './Home';
 import ArticlePage from './Blog/Articles';

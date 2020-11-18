@@ -17,7 +17,7 @@ export default class MemoRouter extends RouterBase {
         RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
 
-      const user = await findUser(this.resourceManager, ctx.local.userSession.user_id, ['memos'/* , 'memos.users' */])
+      const user = await findUser(this.resourceManager, ctx.local.userSession.user_id, ['memos'/* , 'memos.users' */]);
       if (!user) {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
@@ -31,7 +31,7 @@ export default class MemoRouter extends RouterBase {
 
       try {
         const memo = await userCreateMemo(this.resourceManager, ctx.local.userSession.user_id, ctx.request.body);
-        ctx.body = memo;
+        return ctx.body = memo;
       } catch (error) {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
@@ -41,8 +41,8 @@ export default class MemoRouter extends RouterBase {
       if (!ctx.local.userSession || !ctx.local.userSession.user_id) {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
-      const memo = await patchMemo(this.resourceManager, ctx.params.memoId, ctx.request.body)
-      ctx.body = memo;
+      const memo = await patchMemo(this.resourceManager, ctx.params.memoId, ctx.request.body);
+      return ctx.body = memo;
     });
   }
 }

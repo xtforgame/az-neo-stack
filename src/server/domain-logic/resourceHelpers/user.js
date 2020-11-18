@@ -164,14 +164,14 @@ export const patchUser = async (resourceManager, userId, data = {}) => {
 
 
 // create project
-export const userInstCreateProject = async (user, projectName, organization_id, transaction, extras) => {
-  return user.createProject({
-    name: projectName,
-    data: {},
-    organization_id,
-    ...extras,
-  }, { through: { role: 'owner' }, transaction });
-};
+export const userInstCreateProject = async (
+  user, projectName, organization_id, transaction, extras,
+) => user.createProject({
+  name: projectName,
+  data: {},
+  organization_id,
+  ...extras,
+}, { through: { role: 'owner' }, transaction });
 
 export const userCreateProject = async (resourceManager, userId, projectName, organization_id, transaction, extras) => {
   const User = resourceManager.getSqlzModel('user');
@@ -206,7 +206,9 @@ export const userCreateProject = async (resourceManager, userId, projectName, or
   return porject;
 };
 
-export const findOrCreateNonregisteredUser = async (resourceManager, provider_user_id, { name, data }, includes = []) => {
+export const findOrCreateNonregisteredUser = async (
+  resourceManager, provider_user_id, { name, data }, includes = [],
+) => {
   const AccountLink = resourceManager.getSqlzModel('accountLink');
   const accountLink = await AccountLink.findOne({
     where: {

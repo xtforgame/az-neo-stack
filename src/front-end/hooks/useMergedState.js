@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 import { injectionKey } from 'common/react/az-preloaded-state-context';
-import { loadState, saveState, removeState } from '../localStorage';
+import { loadState, saveState /* , removeState */ } from '../localStorage';
 import getMobileDetect from '../utils/getMobileDetect';
 
 const getCookieValueByIndex = (startIndex) => {

@@ -1,4 +1,3 @@
-import throttle from 'lodash/throttle';
 import { jwtIssuer } from 'common/config';
 
 const stateKey = `${jwtIssuer}:state`;

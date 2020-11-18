@@ -11,7 +11,7 @@ import appRootPath from 'app-root-path';
 import MobileDetect from 'mobile-detect';
 import i18nextMiddleware from 'i18next-http-middleware';
 import Backend from 'i18next-fs-backend';
-import { urlPrefix, routerPrefix } from 'common/config';
+import { urlPrefix } from 'common/config';
 import i18n from 'common/react/i18n';
 import getWebpackService from './webpack-service';
 import runServer from './runServer';

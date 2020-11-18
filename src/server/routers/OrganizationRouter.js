@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import Sequelize from 'sequelize';
 import {
   // RestfulResponse,
   RestfulError,
@@ -35,8 +34,10 @@ export default class OrganizationRouter extends RouterBase {
       }
 
       try {
-        const organization = await userCreateOrganization(this.resourceManager, ctx.local.userSession.user_id, ctx.request.body.name);
-        ctx.body = organization;
+        const organization = await userCreateOrganization(
+          this.resourceManager, ctx.local.userSession.user_id, ctx.request.body.name
+        );
+        return ctx.body = organization;
       } catch (error) {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
@@ -47,7 +48,7 @@ export default class OrganizationRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
       const organization = await patchOrganization(this.resourceManager, ctx.params.organizationId, ctx.request.body);
-      ctx.body = organization;
+      return ctx.body = organization;
     });
 
     router.get('/api/organizations/:organizationId/members', this.authKit.koaHelperEx.getIdentity, async (ctx, next) => {
@@ -55,7 +56,9 @@ export default class OrganizationRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
 
-      const members = await findOrganizationMembers(this.resourceManager, ctx.local.userSession.user_id, ctx.params.organizationId);
+      const members = await findOrganizationMembers(
+        this.resourceManager, ctx.local.userSession.user_id, ctx.params.organizationId
+      );
       if (!members) {
         return RestfulError.koaThrowWith(ctx, 404, 'Organization not found');
       }
@@ -78,13 +81,15 @@ export default class OrganizationRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 400, 'Wong user');
       }
 
-      const member = await createOrganizationMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.organizationId, {
-        username,
-        password,
-        name,
-        disabled,
-        privilege: 'user',
-      });
+      const member = await createOrganizationMember(
+        this.resourceManager, ctx.local.userSession.user_id, ctx.params.organizationId, {
+          username,
+          password,
+          name,
+          disabled,
+          privilege: 'user',
+        }
+      );
       const u = await findUser(this.resourceManager, member.id, ['organizations']);
       const user = u.get();
       user.userOrganization = user.organizations.find(o => o.id === ctx.params.organizationId).userOrganization;
@@ -97,7 +102,13 @@ export default class OrganizationRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
 
-      const member = await patchOrganizationMember(this.resourceManager, ctx.local.userSession.user_id, ctx.params.organizationId, ctx.params.memberId, ctx.request.body);
+      const member = await patchOrganizationMember(
+        this.resourceManager,
+        ctx.local.userSession.user_id,
+        ctx.params.organizationId,
+        ctx.params.memberId,
+        ctx.request.body,
+      );
       if (!member) {
         return RestfulError.koaThrowWith(ctx, 404, 'Organization not found');
       }

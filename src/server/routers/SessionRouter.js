@@ -2,9 +2,6 @@ import {
   RestfulError,
   RestfulResponse,
 } from 'az-restful-helpers';
-import {
-  findUser,
-} from '~/domain-logic';
 import RouterBase from '../core/router-base';
 
 export default class SessionRouter extends RouterBase {
@@ -39,6 +36,7 @@ export default class SessionRouter extends RouterBase {
           overwrite: true,
         },
       );
+      return true;
     });
 
     router.get('/api/sessions/me', this.authKit.koaHelperEx.getIdentity, async (ctx, next) => {
@@ -47,7 +45,7 @@ export default class SessionRouter extends RouterBase {
       }
       const { userSession } = ctx.local;
 
-      const user = await findUser(this.resourceManager, userSession.user_id);
+      // const user = await findUser(this.resourceManager, userSession.user_id);
       // if (!user || !user.enabled) {
       //   return RestfulError.koaThrowWith(ctx, 403, 'Forbidden');
       // }

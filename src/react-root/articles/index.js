@@ -82,10 +82,6 @@ export const tsArticles = [
   },
 ];
 
-const articlePic5 = `${urlPrefix}pix_bw/fake/Screenshots 2020-09-16 at 12.41.55 AM.png`;
-const articlePic6 = `${urlPrefix}pix_bw/fake/Screenshots 2020-09-16 at 12.42.08 AM.png`;
-const articlePic7 = `${urlPrefix}pix_bw/fake/Screenshots 2020-09-16 at 12.42.27 AM.png`;
-
 export const anArticles = [
   {
     id: 'an-wiprp01',

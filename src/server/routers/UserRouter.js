@@ -20,7 +20,7 @@ export default class UserRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
       const user = await findUser(this.resourceManager, ctx.local.userSession.user_id);
-      ctx.body = user;
+      return ctx.body = user;
     });
 
     router.post('/api/users', async (ctx) => {
@@ -67,7 +67,7 @@ export default class UserRouter extends RouterBase {
         return RestfulError.koaThrowWith(ctx, 404, 'User not found');
       }
       const user = await patchUser(this.resourceManager, ctx.local.userSession.user_id, ctx.request.body);
-      ctx.body = user;
+      return ctx.body = user;
     });
 
     router.get('/api/users', this.authKit.koaHelperEx.getIdentity, async (ctx) => {
@@ -79,7 +79,7 @@ export default class UserRouter extends RouterBase {
       }
 
       const users = await findAllUser(this.resourceManager);
-      ctx.body = users;
+      return ctx.body = users;
     });
   }
 }

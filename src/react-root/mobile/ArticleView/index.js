@@ -1,10 +1,6 @@
 import React from 'react';
-
 import Article from '~/components/Article';
 
-import {
-  urlPrefix,
-} from 'config';
 
 import ArticleList from './ArticleList';
 import OtherArticles from './OtherArticles';
