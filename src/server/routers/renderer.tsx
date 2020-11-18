@@ -11,15 +11,17 @@ import renderHtml from '../../../azdata/renderHtml';
 
 export type RenderOptions = {
   canonicalPath: string;
+  notFound?: boolean;
 };
 
-export default (ctx, path, { canonicalPath } : RenderOptions = { canonicalPath: '' }) => {
+export default (ctx, path, { canonicalPath, notFound = false } : RenderOptions = { canonicalPath: '', notFound: false }) => {
   const sheets = new ServerStyleSheets();
 
   const azPreloadedState : AzPreloadedState = ctx.local.azPreloadedState || {};
   azPreloadedState.reactRenderMode = process.env.reactSsrMode ? 'ssr' : 'csr';
   azPreloadedState.md = ctx.local.md;
   azPreloadedState.i18n = ctx.local.i18n;
+  azPreloadedState.notFound = notFound;
 
   console.log('path :', path);
   const context : any = {};

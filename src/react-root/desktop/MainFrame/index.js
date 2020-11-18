@@ -1,14 +1,9 @@
-import React from 'react';
-
+import React, { useContext } from 'react';
+import preloadedStateContext from 'common/react/az-preloaded-state-context';
 import { makeStyles } from '@material-ui/core/styles';
 import { renderRoutes } from 'react-router-config';
+import NotFound from '~/containers/NotFound';
 import Header from './Header';
-
-import {
-  urlPrefix,
-} from 'config';
-
-import redirect from '../redirect';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -24,11 +19,17 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ route: { routes } }) => {
   const classes = useStyles();
+  const {
+    state: {
+      notFound,
+    },
+  } = useContext(preloadedStateContext);
   return (
     <div className={classes.root}>
       <Header />
       <div className={classes.appBarPlaceholder} />
-      {renderRoutes(routes)}
+      {notFound && (<NotFound />)}
+      {!notFound && renderRoutes(routes)}
     </div>
   );
 };

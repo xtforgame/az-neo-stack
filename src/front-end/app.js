@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Routes from 'react-root/Routes';
-import axios from 'axios';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import { initReactI18next, useSSR } from 'react-i18next';
@@ -14,7 +13,7 @@ import {
   urlPrefix,
 } from 'common/config';
 import i18n, { i18nInit } from 'common/react/i18n';
-import { loadState, saveState, removeState } from './localStorage';
+import useMergedState from './hooks/useMergedState';
 
 class DebugRouter extends BrowserRouter {
   constructor(props) {
@@ -31,33 +30,9 @@ class DebugRouter extends BrowserRouter {
 
 const Router = process.env.reactSsrMode ? DebugRouter : HashRouter;
 
-
-const getCookieValueByIndex = (startIndex) => {
-  let endIndex = document.cookie.indexOf(';', startIndex);
-  if (endIndex === -1) endIndex = document.cookie.length;
-  return unescape(document.cookie.substring(startIndex, endIndex));
-};
-
-const getCookie = (name) => {
-  const arg = `${escape(name)}=`;
-  const nameLen = arg.length;
-  const cookieLen = document.cookie.length;
-  let i = 0;
-  while (i < cookieLen) {
-    const j = i + nameLen;
-    if (document.cookie.substring(i, j) === arg) return getCookieValueByIndex(j);
-    i = document.cookie.indexOf(' ', i) + 1;
-    if (i === 0) break;
-  }
-  return null;
-};
-
 const getInitialI18nStore = () => window[injectionKey] && window[injectionKey].i18n && window[injectionKey].i18n.initialI18nStore;
 
 const Main = () => {
-  const localState = loadState();
-  const [sessionExists, setSessionExists] = useState(getCookie('login-session-exists') === 'true');
-  const [session, setSession] = useState(localState && localState.session);
   if (process.env.reactSsrMode) {
     useSSR(getInitialI18nStore(), window[injectionKey].i18n.initialLanguage);
   }
@@ -67,45 +42,11 @@ const Main = () => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-  const headers = {};
-  // if (session) {
-  //   headers.authorization = `${session.token_type} ${session.token}`;
-  // }
-  const axiosApi = axios.create({
-    headers,
-  });
 
-  const login = (data, rememberMe) => axiosApi({
-    method: 'post',
-    url: 'api/sessions',
-    data,
-  })
-  .then(({ data }) => {
-    console.log('data :', data);
-    if (data.error) {
-      return Promise.reject(data.error);
-    }
-    setSession(data);
-    setSessionExists(getCookie('login-session-exists') === 'true');
-    if (rememberMe) {
-      saveState({ session: data });
-    }
-    return true;
-    // removeState();
-  });
-
+  const mergedPreloadedData = useMergedState();
   return (
     <preloadedStateContext.Provider
-      value={{
-        state: {
-          ...window[injectionKey],
-          ...localState,
-          ...{ session },
-          sessionExists: !!sessionExists,
-        },
-        axiosApi,
-        login,
-      }}
+      value={mergedPreloadedData}
     >
       <Router basename={routerPrefix}>
         {renderRoutes(Routes)}

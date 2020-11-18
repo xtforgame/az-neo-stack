@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { renderRoutes } from 'react-router-config';
 
 import ThemeContainer from './core/ThemeContainer';
-
-import getMobileDetect from './getMobileDetect';
 
 const uiTheme = {
   direction: 'ltr',
@@ -39,17 +37,10 @@ const Container = ({ children }) => {
   );
 };
 
-export default ({ route, ...rest }) => {
-  const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
-  const {
-    isMobile,
-  } = getMobileDetect(userAgent);
-
-  return (
-    <ThemeContainer uiTheme={uiTheme}>
-      <Container>
-        {renderRoutes(route.routes)}
-      </Container>
-    </ThemeContainer>
-  );
-};
+export default ({ route, ...rest }) => (
+  <ThemeContainer uiTheme={uiTheme}>
+    <Container>
+      {renderRoutes(route.routes)}
+    </Container>
+  </ThemeContainer>
+);

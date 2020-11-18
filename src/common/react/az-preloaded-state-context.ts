@@ -3,6 +3,7 @@ import React from 'react';
 export const injectionKey = '__AZ_PRELOADED_STATE__';
 
 export type AzPreloadedState = {
+  notFound: boolean; // is rendering a not found page
   reactRenderMode: 'ssr' | 'csr';
   md: {
     mobile: string | null;
@@ -30,6 +31,7 @@ export type Context = {
 
 export default React.createContext<Context>({
   state: {
+    notFound: false,
     reactRenderMode: process.env.reactSsrMode ? 'ssr' : 'csr',
     md: {
       mobile: null,

@@ -40,11 +40,7 @@ export default class HttpApp extends ServiceBase {
     this.app.use((ctx, next) => next()
     .then(() => {
       if (ctx.body == null && ctx.status === 404) {
-        if (ctx.local.mobileDetect.phone() && ctx.path.startsWith(`${urlPrefix}mobile`)) {
-          renderer(ctx, `${urlPrefix}mobile/not-found`, {});
-        } else {
-          renderer(ctx, `${urlPrefix}not-found`, {});
-        }
+        renderer(ctx, `${urlPrefix}not-found`, { notFound: true });
       }
     })
     .catch((err) => {
